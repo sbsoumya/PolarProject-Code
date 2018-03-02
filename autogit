@@ -1,0 +1,9 @@
+cd /home/smart/Grive/IISC-CN2/Project/code
+date >> gitcodesync.txt
+git add .
+sleep 3
+git commit -m "daily-autogit"
+sleep 3
+git push origin master
+sleep 1
+
