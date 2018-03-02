@@ -1,5 +1,5 @@
 #---------------------------------------------------
-# Name:       thetafinder.py
+# Name:       empiricalbadcap
 # Purpose:    plotter to be used to find theta
 #
 #
@@ -40,31 +40,22 @@ N=1024
 design_p=0.04
 runsim=1000
 channel_plist=[0.04,0.15,0.2,0.25]
+skip=0
 C=pl.CapacityBSC(N,design_p)
 G=int(C)
 
 #------------------------------------LT
 #G=250
-LT=float(np.log2(N)/N)
-LT=5
-
-print LT
-#Fdict=lmb.perc_goodchannel_WD(LLRdict,channel_plist,N,LT,G,runsim)
-#Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=False,use_func_for_LT=True)
-#Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=True,use_func_for_LT=True)
-Fdict=lmb.perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad=True,use_func_for_LT=True)
-PT=15
-LT=lmb. f_Irv_abs(LT)
-Ppercdict=lmb.PrOffracaboveFT(Fdict,channel_plist,PT,runsim)
-print Ppercdict
-
+Edict=lmb.E_channel_Irv_WU(LLRdict,channel_plist,N,G,runsim)
+print Edict["0.04"]
+print sum( a>= 0.68 for a in Edict["0.04"])
 color=["red","blue","green","yellow"]
 plt.figure(1)
 index= range(runsim)
 j=1
 for channel_p in channel_plist:
 	j+=1
-	plt.scatter(index,Fdict[str(channel_p)],color=color[j-2],label="p$_{channel}=$"+str(channel_p))
+	plt.scatter(index,Edict[str(channel_p)],color=color[j-2],label="p$_{channel}=$"+str(channel_p))
 	
 plt.legend(loc="best")
 plt.title("Thresholds for PHY-ED \n $\lambda$="+str(LT)+",$\Theta$="+str(PT)+",p$_{guessed}$="+str(design_p))

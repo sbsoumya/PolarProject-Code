@@ -218,6 +218,7 @@ def perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad,use_func_for
 	#as I is a subsequence of RI , only G is needed
 	if use_func_for_LT:
 		LT=f_Irv_abs(LT)
+		print LT
 		
 	Fdict={}
 	for channel_p in channel_plist:
@@ -238,6 +239,29 @@ def perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad,use_func_for
 			Fdict[str(channel_p)].append(float(num_channel)*100/len(LLRchannels))
 		
 	return Fdict
+
+#returns  empirical average of f_Irv for the channels	
+def E_channel_Irv_WU(LLRdict,channel_plist,N,G,runsim):
+	#as I is a subsequence of RI , only G is needed
+	#if use_func_for_LT:
+	#	LT=f_Irv_abs(LT)
+		
+	Edict={}
+	for channel_p in channel_plist:
+		print "\nrunning for "+str(channel_p)+"..."
+		
+		Edict[str(channel_p)]=[]
+		E_channel=np.zeros(N-G)	
+		for i in range(runsim):
+			LLRchannels=LLRdict[str(channel_p)][i][0][G:]
+			SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
+			presentIrv=[f_Irv_abs(abs(llr)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+			
+			E_channel=E_channel+np.array(presentIrv,dtype=float)/runsim
+		
+		Edict[str(channel_p)]=E_channel
+		
+	return Edict
 	
 def PrOffracaboveFT(Fdict,channel_plist,PT,runsim):
 	#as I is a subsequence of RI , only G is needed
