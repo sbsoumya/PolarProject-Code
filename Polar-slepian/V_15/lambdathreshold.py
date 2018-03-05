@@ -232,7 +232,7 @@ def perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad,use_func_for
 				#print SentBitchannels
 			else:
 				LLRchannels=LLRdict[str(channel_p)][i][0][:G]
-				SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
+				SentBitchannels=LLRdict[str(channel_p)][i][1][:G]
 				
 			#num_channel=sum(f_Irv_abs(abs(llr)) >= LT for llr in LLRchannels)
 			num_channel=sum(f_Irv(llr,int(sentbit)) >= LT for llr,sentbit in zip(LLRchannels,SentBitchannels))
@@ -255,7 +255,7 @@ def E_channel_Irv_WU(LLRdict,channel_plist,N,G,runsim):
 		for i in range(runsim):
 			LLRchannels=LLRdict[str(channel_p)][i][0][G:]
 			SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
-			presentIrv=[f_Irv_abs(abs(llr)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+			presentIrv=[f_Irv(llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
 			
 			E_channel=E_channel+np.array(presentIrv,dtype=float)/runsim
 		

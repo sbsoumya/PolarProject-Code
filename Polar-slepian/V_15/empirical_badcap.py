@@ -43,26 +43,36 @@ channel_plist=[0.04,0.15,0.2,0.25]
 skip=0
 C=pl.CapacityBSC(N,design_p)
 G=int(C)
-
+F=N-G
 #------------------------------------LT
 #G=250
 Edict=lmb.E_channel_Irv_WU(LLRdict,channel_plist,N,G,runsim)
-print Edict["0.04"]
-print sum( a>= 0.68 for a in Edict["0.04"])
+
+
+#print sum( a>= 0.68 for a in Edict["0.04"])
+
+LT=5
+
 color=["red","blue","green","yellow"]
 plt.figure(1)
 index= range(runsim)
 j=1
+
+for i in range(F):
+	#Edictline=[Edict[str(cp)][i] for cp in channel_plist]
+	plt.plot(channel_plist,[Edict[str(cp)][i] for cp in channel_plist],'k')
+	
 for channel_p in channel_plist:
 	j+=1
-	plt.scatter(index,Edict[str(channel_p)],color=color[j-2],label="p$_{channel}=$"+str(channel_p))
-	
+	plt.scatter([channel_p]*F,Edict[str(channel_p)],color=color[j-2],label="p$_{channel}=$"+str(channel_p))
+
+plt.plot(channel_plist,[lmb.f_Irv_abs(LT)]*len(channel_plist),'m')
 plt.legend(loc="best")
-plt.title("Thresholds for PHY-ED \n $\lambda$="+str(LT)+",$\Theta$="+str(PT)+",p$_{guessed}$="+str(design_p))
-plt.xlabel("Simulation number"+"\n"+"P(atleast $\Theta$ \% of badchannels $\geq\lambda$)="+str(Ppercdict))
+plt.title("Empirical Frozen channel Capacity ,p$_{guessed}$="+str(design_p))
+plt.xlabel("p$_{channel}$")
 plt.grid(True)
 #plt.ylabel("\% of good channels with $|LLR| \geq \lambda$")
-plt.ylabel("\% of bad channels with $log 2/(1+e^{llr*(1-2u)}) \geq \lambda$")
+plt.ylabel("Empirical Frozen channel capacity")
 
 #plt.figtext(0.005, 0.03, "P("+str(PT)+"\% of goodchannels $\geq\lambda$)="+str(Ppercdict))#+"\n"+filename)
 

@@ -16,6 +16,12 @@ import problib as pl
 import pandas as pd
 from scipy import stats, integrate
 import polarconstruct as pcon
+import lambdathreshold as lmb
+
+
+#plt.rc('text', usetex=True)
+#plt.rc('font', family='serif')
+
 
 import seaborn as sns
 sns.set(color_codes=True)
@@ -24,51 +30,42 @@ sns.set(color_codes=True)
 
 #to be automated
 
-filename1="./simresults/llrsgndict-1024-0p04-17-11-23_17-28-36.txt"
-
-
-
-
-table = []
-with open(filename1,'r') as f:
-    for line in f:
-        table.append(json.loads(line))
-
-print len(table)
-
-#23 if prob_checker file, 20 if llrdict file
-LLRdict=table[0]
-
-
-
-channel_plist=[0.04,0.15]
+#filename1="./simresults/llrsgndict-1024-0p04-17-11-23_17-28-36.txt"
+filename="./simresults/llrsgndict-1024-0p04-18-02-15_14-58-19.txt"
+LLRdict=lmb.load_LLRdict(filename)
 N=1024
-#channel_plist=[0.1]
-color=["green","yellow"]
-
-
+design_p=0.04
 runsim=1000
+channel_plist=[0.04,0.15,0.2,0.25]
+skip=0
+C=pl.CapacityBSC(N,design_p)
+G=int(C)
+F=N-G
+color=["red","blue","green","yellow"]
 
 plt.figure(1)
-#index=range(len(RI))
 j=0
+
+#print len(range(F))
+
 for channel_p in channel_plist:
 	j+=1
 	#plt.figure(j)
 	for i in range(runsim):
-		plt.scatter(range(N),LLRdict[str(channel_p)][i],color=color[j-1])
+		
+		LLRchannels=LLRdict[str(channel_p)][i][0]#[G:]
+		SentBitchannels=LLRdict[str(channel_p)][i][1]#[G:]
+		presentIrv=[lmb.f_Irv(llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+		#print len(presentIrv)
+		plt.scatter(range(N),presentIrv,color=color[j-1])
 			
 		#plt.xticks(index,RI,rotation="vertical")
 		
 	#plt.hold(True)
-	plt.title("LLR for 0.15 , compound_channel=[0.04,0.15,0.2,0.25]")
+	plt.title("LLR for 0.04 , compound_channel=[0.04,0.15,0.2,0.25]")
 
-
-
-#densitydata=[LLRdict[str('0.04')][i][0] for i in range(runsim)]
-#sns.distplot(densitydata)
 plt.show();
 
-#------------------------------------------highly specific to file
+
 
 
