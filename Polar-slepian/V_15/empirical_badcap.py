@@ -58,13 +58,15 @@ plt.figure(1)
 index= range(runsim)
 j=1
 
+for channel_p in channel_plist:
+	j+=1
+	plt.scatter([channel_p]*F,Edict[str(channel_p)],color=color[j-2],label="p$_{channel}=$"+str(channel_p))
+	
+
 for i in range(F):
 	#Edictline=[Edict[str(cp)][i] for cp in channel_plist]
 	plt.plot(channel_plist,[Edict[str(cp)][i] for cp in channel_plist],'k')
 	
-for channel_p in channel_plist:
-	j+=1
-	plt.scatter([channel_p]*F,Edict[str(channel_p)],color=color[j-2],label="p$_{channel}=$"+str(channel_p))
 
 plt.plot(channel_plist,[lmb.f_Irv_abs(LT)]*len(channel_plist),'m')
 plt.legend(loc="best")
