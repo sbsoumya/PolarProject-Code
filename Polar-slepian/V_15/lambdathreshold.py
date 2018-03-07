@@ -276,10 +276,10 @@ def f_iden(x):
 	return x
 	
 def f_Irv_abs(absllr):
-	return ma.log(2)-ml.logdomain_sum(0,-absllr)
+	return (ma.log(2)-ml.logdomain_sum(0,-absllr))/ma.log(2)
 	
 def f_Irv(llr,sentbit):
-	return ma.log(2)-ml.logdomain_sum(0,-llr*(1-2*sentbit))
+	return (ma.log(2)-ml.logdomain_sum(0,-llr*(1-2*sentbit)))/ma.log(2)
 	 # unlike the theory here llr is p0/p1 s0 -llr
 
 #----------------------------------fuctions for implementation of rateless LTPT
