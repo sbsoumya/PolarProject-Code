@@ -54,15 +54,15 @@ for channel_p in channel_plist:
 	#plt.figure(j)
 	for i in range(runsim):
 		
-		LLRchannels=LLRdict[str(channel_p)][i][0]#[G:]
-		SentBitchannels=LLRdict[str(channel_p)][i][1]#[G:]
-		ReceivedBitchannels=LLRdict[str(channel_p)][i][2]#[G:]
-		#presentIrv=[(llr)*(1-2*int(sentbit))/3000 for llr,sentbit in zip(LLRchannels,SentBitchannels)]
-		presentIrv=[(llr)*(1-2*int(rcvbit))/3000 for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
+		LLRchannels=LLRdict[str(channel_p)][i][0][:G]
+		SentBitchannels=LLRdict[str(channel_p)][i][1][:G]
+		ReceivedBitchannels=LLRdict[str(channel_p)][i][2][:G]
+		presentIrv=[np.log2(2/(1+np.exp((llr)*(2*int(sentbit)-1)))) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+		presentIrv=[np.log2(2/(1+np.exp((llr)*(2*int(rcvbit)-1)))) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
 				
 		#print len(presentIrv)
-		plt.scatter(range(N)[::skip+1],presentIrv[::skip+1],color=color[j-1])
-		plt.scatter(range(N)[::skip+1],[int(sb) for sb in ReceivedBitchannels][::skip+1],color='k')
+		plt.scatter(range(G)[::skip+1],presentIrv[::skip+1],color=color[j-1])
+		#plt.scatter(range(N)[::skip+1],[int(sb) for sb in ReceivedBitchannels][::skip+1],color='k')
 		#plt.xticks(index,RI,rotation="vertical")
 		
 	#plt.hold(True)
