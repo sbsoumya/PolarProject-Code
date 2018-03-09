@@ -58,7 +58,7 @@ for channel_p in channel_plist:
 		SentBitchannels=LLRdict[str(channel_p)][i][1][:G]
 		ReceivedBitchannels=LLRdict[str(channel_p)][i][2][:G]
 		presentIrv=[np.log2(2/(1+np.exp((llr)*(2*int(sentbit)-1)))) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
-		presentIrv=[np.log2(2/(1+np.exp((llr)*(2*int(rcvbit)-1)))) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
+		presentIrv=[1-ml.logdomain_sum(0,llr*(2*int(rcvbit)-1))/np.log(2) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
 				
 		#print len(presentIrv)
 		plt.scatter(range(G)[::skip+1],presentIrv[::skip+1],color=color[j-1])
