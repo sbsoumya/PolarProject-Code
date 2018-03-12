@@ -211,6 +211,29 @@ def perc_goodchannel_LTvec_WD(LLRdict,channel_plist,N,LTvec,G,runsim): #LTvec in
 			Fdict[str(channel_p)].append(float(num_goodchannel)*100/G)
 		
 	return Fdict
+	
+def E_channel_abs_llr(LLRdict,channel_plist,N,G,runsim):
+	#as I is a subsequence of RI , only G is needed
+	#if use_func_for_LT:
+	#	LT=f_Irv_abs(LT)
+		
+	Edict={}
+	for channel_p in channel_plist:
+		print "\nrunning for "+str(channel_p)+"..."
+		
+		Edict[str(channel_p)]=[]
+		E_channel=np.zeros(N-G)	
+		for i in range(runsim):
+			LLRchannels=LLRdict[str(channel_p)][i][0][G:]
+			SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
+			RV=[abs(llr) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+			
+			E_channel=E_channel+np.array(RV,dtype=float)/runsim
+		
+		Edict[str(channel_p)]=E_channel
+		
+	return Edict	
+
 
 #=======================Functions for LLRdictWU
 	
@@ -256,13 +279,35 @@ def E_channel_Irv_WU(LLRdict,channel_plist,N,G,runsim):
 		for i in range(runsim):
 			LLRchannels=LLRdict[str(channel_p)][i][0][G:]
 			SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
-			presentIrv=[f_Irv(llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+			RV=[f_Irv(llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
 			
-			E_channel=E_channel+np.array(presentIrv,dtype=float)/runsim
+			E_channel=E_channel+np.array(RV,dtype=float)/runsim
 		
 		Edict[str(channel_p)]=E_channel
 		
 	return Edict
+def E_channel_altIrv_WU(LLRdict,channel_plist,N,G,runsim):
+	#as I is a subsequence of RI , only G is needed
+	#if use_func_for_LT:
+	#	LT=f_Irv_abs(LT)
+		
+	Edict={}
+	for channel_p in channel_plist:
+		print "\nrunning for "+str(channel_p)+"..."
+		
+		Edict[str(channel_p)]=[]
+		E_channel=np.zeros(N-G)	
+		for i in range(runsim):
+			LLRchannels=LLRdict[str(channel_p)][i][0][G:]
+			SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
+			RV=[-f_Irv(-llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+			
+			E_channel=E_channel+np.array(RV,dtype=float)/runsim
+		
+		Edict[str(channel_p)]=E_channel
+		
+	return Edict
+	
 def E_channel_Irv_abs(LLRdict,channel_plist,N,G,runsim):
 	#as I is a subsequence of RI , only G is needed
 	#if use_func_for_LT:
@@ -277,34 +322,13 @@ def E_channel_Irv_abs(LLRdict,channel_plist,N,G,runsim):
 		for i in range(runsim):
 			LLRchannels=LLRdict[str(channel_p)][i][0][G:]
 			SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
-			presentIrv=[f_Irv_abs(abs(llr)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+			RV=[f_Irv_abs(abs(llr)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
 			
-			E_channel=E_channel+np.array(presentIrv,dtype=float)/runsim
+			E_channel=E_channel+np.array(RV,dtype=float)/runsim
 		
 		Edict[str(channel_p)]=E_channel
 		
 	return Edict
-def E_channel_abs_llr(LLRdict,channel_plist,N,G,runsim):
-	#as I is a subsequence of RI , only G is needed
-	#if use_func_for_LT:
-	#	LT=f_Irv_abs(LT)
-		
-	Edict={}
-	for channel_p in channel_plist:
-		print "\nrunning for "+str(channel_p)+"..."
-		
-		Edict[str(channel_p)]=[]
-		E_channel=np.zeros(N-G)	
-		for i in range(runsim):
-			LLRchannels=LLRdict[str(channel_p)][i][0][G:]
-			SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
-			presentIrv=[abs(llr) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
-			
-			E_channel=E_channel+np.array(presentIrv,dtype=float)/runsim
-		
-		Edict[str(channel_p)]=E_channel
-		
-	return Edict	
 
 def PrOffracaboveFT(Fdict,channel_plist,PT,runsim):
 	#as I is a subsequence of RI , only G is needed
@@ -317,6 +341,9 @@ def PrOffracaboveFT(Fdict,channel_plist,PT,runsim):
 #---------------------------------functions for f_absllr,f_llr
 def f_iden(x):
 	return x
+	
+def f_abs(x):
+	return abs(x)
 	
 def f_Irv_abs(absllr):
 	return (ma.log(2)-ml.logdomain_sum(0,-absllr))/ma.log(2)

@@ -47,14 +47,21 @@ G=int(C)
 #G=250
 LT=float(np.log2(N)/N)
 LT=5
-
-print LT
-#Fdict=lmb.perc_goodchannel_WD(LLRdict,channel_plist,N,LT,G,runsim)
-#Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=False,use_func_for_LT=True)
-Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=True,use_func_for_LT=True)
-#Fdict=lmb.perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad=True,use_func_for_LT=True)
 PT=12
+print LT
+#absllr
+#Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_abs,use_bad=False,use_func_for_LT=True)
+#LT=lmb.f_abs(LT)
+		
+#f_Irv
+#Fdict=lmb.perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad=True,use_func_for_LT=True)
+#LT=lmb.f_Irv_abs(LT)
+
+
+#f_Irv_abs
+Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=True,use_func_for_LT=True)
 LT=lmb.f_Irv_abs(LT)
+
 Ppercdict=lmb.PrOffracaboveFT(Fdict,channel_plist,PT,runsim)
 print Ppercdict
 
@@ -65,16 +72,33 @@ j=1
 for channel_p in channel_plist:
 	j+=1
 	plt.scatter(index,Fdict[str(channel_p)],color=color[j-2],label="p$_{channel}=$"+str(channel_p))
+
+
+
+
+#~ fnick="absllr-good"
+#~ f="$|LLR|"	
+
+#~ fnick="f_Irv"
+#~ f="$log 2/(1+e^{-llr*(1-2u)})"
+
+#~ fnick="f_Irv_rcv"
+#~ f="$log 2/(1+e^{-llr*(1-2r)})"
+
+fnick="f_Irv_abs"
+f="$log 2/(1+e^{-|llr|})"
+
+#~ fnick="f_Irv_altered"
+#~ f="$-log 2/(1+e^{llr*(1-2u)})"
 	
 plt.legend(loc="best")
 plt.title("Thresholds for PHY-ED \n $\lambda$="+str(LT)+",$\Theta$="+str(PT)+",p$_{guessed}$="+str(design_p))
 plt.xlabel("Simulation number"+"\n"+"P(atleast $\Theta$ \% of badchannels $\geq\lambda$)="+str(Ppercdict))
 plt.grid(True)
 #plt.ylabel("\% of good channels with $|LLR| \geq \lambda$")
-plt.ylabel("\% of bad channels with $log 2/(1+e^{llr*(1-2u)}) \geq \lambda$")
+plt.ylabel("\% of bad channels with "+f+" \geq \lambda$")
 
 #plt.figtext(0.005, 0.03, "P("+str(PT)+"\% of goodchannels $\geq\lambda$)="+str(Ppercdict))#+"\n"+filename)
+plt.savefig("./simresults/theta_"+fnick+"_0p04"+"_"+".png", bbox_inches='tight')
 
-plt.show()
-
-#1+e^{llr*(1-2u)}
+plt.show();

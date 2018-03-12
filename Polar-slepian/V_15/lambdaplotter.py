@@ -20,12 +20,12 @@ import lambdathreshold as lmb
 import math as ma
 import matlib as ml
 
-#plt.rc('text', usetex=True)
-#plt.rc('font', family='serif')
+plt.rc('text', usetex=True)
+plt.rc('font', family='serif')
 
 
-import seaborn as sns
-sns.set(color_codes=True)
+#import seaborn as sns
+#sns.set(color_codes=True)
 
 #-------------------------------------------polar_channel_FERvsR
 
@@ -37,41 +37,86 @@ LLRdict=lmb.load_LLRdict(filename)
 N=1024
 design_p=0.04
 runsim=1000
-channel_plist=[0.04,0.15]#,0.2,0.25]
+channel_plist=[0.04,0.15,0.2,0.25]
 skip=0
 C=pl.CapacityBSC(N,design_p)
 G=int(C)
 F=N-G
-color=["green","yellow"]
-
+color=["red","blue","green","yellow"]
 plt.figure(1)
 j=0
 
-#print len(range(F))
-
 for channel_p in channel_plist:
 	j+=1
-	#plt.figure(j)
+	marker='o'
+	alpha=1
+	if j>1:
+		marker='x'
+		alpha=0.2
+	
 	for i in range(runsim):
-		
+		# all channels
 		LLRchannels=LLRdict[str(channel_p)][i][0]
 		SentBitchannels=LLRdict[str(channel_p)][i][1]
 		ReceivedBitchannels=LLRdict[str(channel_p)][i][2]
-		#presentIrv=[lmb.f_Irv(llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
-		#presentIrv=[lmb.f_Irv(llr,int(rcvbit)) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
-		#presentIrv=[abs(llr) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
-		presentIrv=[lmb.f_Irv_abs(abs(llr)) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
-		plt.scatter(range(N)[::skip+1],presentIrv[::skip+1],color=color[j-1])
-
 		
-	#plt.hold(True)
-	
+		#abs(llr)
+		RV=[abs(llr) for llr in LLRchannels]
+		
+		#f_Irv
+		#RV=[lmb.f_Irv(llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+				
+		#f_Irv_rcv
+		#RV=[lmb.f_Irv(llr,int(rcvbit)) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
+		
+		#f_Irv_abs
+		#RV=[lmb.f_Irv_abs(abs(llr)) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
+		#RV=[lmb.f_Irv_abs(abs(llr))-lmb.f_Irv(llr,int(rcvbit)) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
+		#RV2=[int(rcvbit) for rcvbit in ReceivedBitchannels]
+		#RV=[1-ml.logdomain_sum(0,-llr*(1-2*int(rcvbit)))/ma.log(2) for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
+		#RV3=[1-ml.logdomain_sum(0,-abs(llr))/ma.log(2)+2 for llr in LLRchannels]
+		
+		#RV=[llr for llr,rcvbit in zip(LLRchannels,ReceivedBitchannels)]
+		#RV3=[abs(llr) for llr in LLRchannels]
+		
+		#f_Irv_altered
+		#RV=[-lmb.f_Irv(-llr,int(sentbit)) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+		
+		if i==0:
+			plt.scatter(range(N)[::skip+1],RV[::skip+1],marker=marker,color=color[j-1],label='p$_{channel}$='+str(channel_p))
+		else:
+			plt.scatter(range(N)[::skip+1],RV[::skip+1],marker=marker,alpha=alpha,color=color[j-1])
+			
+		#plt.scatter(range(N)[::skip+1],RV2[::skip+1],marker=marker,alpha=alpha,color='k')
+		#plt.scatter(range(N)[::skip+1],RV3[::skip+1],marker=marker,alpha=alpha,color='g')
+		
+		
 
+fnick="absllr"
+f="$|LLR|$"	
 
-	plt.title("f_Irv_abs for 0.04 , compound_channel=[0.04,0.15]")
+#~ fnick="f_Irv"
+#~ f="$log 2/(1+e^{-llr*(1-2u)})$"
 
+#~ fnick="f_Irv_rcv"
+#~ f="$log 2/(1+e^{-llr*(1-2r)})$"
+
+#fnick="f_Irv_abs"
+#f="$log 2/(1+e^{-|llr|})$"
+
+#~ fnick="f_Irv_altered"
+#~ f="$-log 2/(1+e^{llr*(1-2u)})$"
+
+plt.title(f+" for p$_{guess}$=0.04,\emph{Compound Channel=$\{$0.04,0.15,0.2,0.25$\}$ }")
+plt.xlabel('Polarized bit Channel as per Reliability Ordering.')
+plt.ylabel(f)
+plt.legend(loc="lower right")
+plt.grid(True)
+
+plt.savefig("./simresults/lambda_"+fnick+"_0p04"+"_"+".png", bbox_inches='tight')
 
 plt.show();
+
 
 
 

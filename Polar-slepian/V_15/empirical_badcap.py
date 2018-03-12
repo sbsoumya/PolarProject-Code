@@ -46,12 +46,16 @@ G=int(C)
 F=N-G
 #------------------------------------LT
 #G=250
-Edict=lmb.E_channel_Irv_abs(LLRdict,channel_plist,N,G,runsim)
+#absllr
+#Edict=lmb.E_channel_abs_llr(LLRdict,channel_plist,N,G,runsim)
+
+		
+#f_Irv
+Edict=lmb.E_channel_altIrv_WU(LLRdict,channel_plist,N,G,runsim)
 
 
-#print sum( a>= 0.68 for a in Edict["0.04"])
-
-LT=30
+#f_Irv_abs
+#Edict=lmb.E_channel_Irv_abs(LLRdict,channel_plist,N,G,runsim)
 
 color=["red","blue","green","yellow"]
 plt.figure(1)
@@ -68,16 +72,33 @@ for i in range(F):
 	plt.plot(channel_plist,[Edict[str(cp)][i] for cp in channel_plist],'k')
 	
 
+
+#fnick="absllr"
+#f="$|LLR|$"	
+
+#~ fnick="f_Irv"
+#~ f="$log 2/(1+e^{-llr*(1-2u)})$"
+
+#~ fnick="f_Irv_rcv"
+#~ f="$log 2/(1+e^{-llr*(1-2r)})$"
+
+#~ fnick="f_Irv_abs"
+#~ f="$log 2/(1+e^{-|llr|})$"
+
+fnick="f_Irv_altered"
+f="$-log 2/(1+e^{llr*(1-2u)})$"
+	
+
+
 #plt.plot(channel_plist,[LT]*len(channel_plist),'m')
 plt.legend(loc="best")
-plt.title("Empirical E[Irv-abs] ,p$_{guessed}$="+str(design_p))
+plt.title("Empirical E["+f+"] ,p$_{guessed}$="+str(design_p))
 plt.xlabel("p$_{channel}$")
 plt.grid(True)
 #plt.ylabel("\% of good channels with $|LLR| \geq \lambda$")
-plt.ylabel("Empirical Frozen channel capacity")
+plt.ylabel("E[] for Frozen channel ")
+plt.savefig("./simresults/Ex_"+fnick+"_0p04"+"_"+".png", bbox_inches='tight')
 
-#plt.figtext(0.005, 0.03, "P("+str(PT)+"\% of goodchannels $\geq\lambda$)="+str(Ppercdict))#+"\n"+filename)
-
-plt.show()
+plt.show();
 
 #1+e^{llr*(1-2u)}
