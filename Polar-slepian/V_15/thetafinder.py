@@ -51,10 +51,10 @@ LT=5
 print LT
 #Fdict=lmb.perc_goodchannel_WD(LLRdict,channel_plist,N,LT,G,runsim)
 #Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=False,use_func_for_LT=True)
-#Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=True,use_func_for_LT=True)
-Fdict=lmb.perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad=True,use_func_for_LT=True)
-PT=15
-LT=lmb. f_Irv_abs(LT)
+Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=True,use_func_for_LT=True)
+#Fdict=lmb.perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad=True,use_func_for_LT=True)
+PT=12
+LT=lmb.f_Irv_abs(LT)
 Ppercdict=lmb.PrOffracaboveFT(Fdict,channel_plist,PT,runsim)
 print Ppercdict
 

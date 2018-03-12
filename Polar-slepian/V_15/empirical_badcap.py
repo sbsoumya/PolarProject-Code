@@ -46,12 +46,12 @@ G=int(C)
 F=N-G
 #------------------------------------LT
 #G=250
-Edict=lmb.E_channel_Irv_WU(LLRdict,channel_plist,N,G,runsim)
+Edict=lmb.E_channel_Irv_abs(LLRdict,channel_plist,N,G,runsim)
 
 
 #print sum( a>= 0.68 for a in Edict["0.04"])
 
-LT=5
+LT=30
 
 color=["red","blue","green","yellow"]
 plt.figure(1)
@@ -68,9 +68,9 @@ for i in range(F):
 	plt.plot(channel_plist,[Edict[str(cp)][i] for cp in channel_plist],'k')
 	
 
-plt.plot(channel_plist,[lmb.f_Irv_abs(LT)]*len(channel_plist),'m')
+#plt.plot(channel_plist,[LT]*len(channel_plist),'m')
 plt.legend(loc="best")
-plt.title("Empirical Frozen channel Capacity ,p$_{guessed}$="+str(design_p))
+plt.title("Empirical E[Irv-abs] ,p$_{guessed}$="+str(design_p))
 plt.xlabel("p$_{channel}$")
 plt.grid(True)
 #plt.ylabel("\% of good channels with $|LLR| \geq \lambda$")
