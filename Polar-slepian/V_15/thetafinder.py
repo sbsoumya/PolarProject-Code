@@ -93,7 +93,7 @@ f="$log 2/(1+e^{-|llr|})"
 	
 plt.legend(loc="best")
 plt.title("Thresholds for PHY-ED \n $\lambda$="+str(LT)+",$\Theta$="+str(PT)+",p$_{guessed}$="+str(design_p))
-plt.xlabel("Simulation number"+"\n"+"P(atleast $\Theta$ \% of badchannels $\geq\lambda$)="+str(Ppercdict))
+plt.xlabel("Simulation number"+"\n"+"P(atleast $\Theta$ \% of badchannels $\geq\lambda$)="+str(Ppercdict)+"\n"+filename)
 plt.grid(True)
 #plt.ylabel("\% of good channels with $|LLR| \geq \lambda$")
 plt.ylabel("\% of bad channels with "+f+" \geq \lambda$")
