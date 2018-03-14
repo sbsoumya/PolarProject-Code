@@ -11,13 +11,21 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+import lambdathreshold as lmb
 
-# Load dataset
+#~ # Load validation dataset
+#~ #filename="./simresults/llrsgndict-1024-0p2-18-02-15_14-58-44.txt"
+#~ #filename="./simresults/llrsgndict-1024-0p15-18-02-15_14-58-32.txt"
+#~ filename="./simresults/llrsgndict-1024-0p04-18-02-15_14-58-19.txt"
+
+
+#~ LLRdict=lmb.load_LLRdict(filename)
+
+
 url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
 names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
 dataset = pandas.read_csv(url, names=names)
 
-#data set story
 print dataset.describe()
 #print(dataset.groupby('class').size())
 # box and whisker plots
@@ -38,9 +46,6 @@ Y = array[:,4]
 validation_size = 0.20
 seed = 7
 X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, test_size=validation_size, random_state=seed)
-
-
-
 scoring = 'accuracy'
 # Spot Check Algorithms
 models = []
@@ -53,35 +58,27 @@ models.append(('SVM', SVC()))
 # evaluate each model in turn
 results = []
 names = []
-#~ for name, model in models:
-	#~ kfold = model_selection.KFold(n_splits=10, random_state=seed)
-	#~ cv_results = model_selection.cross_val_score(model, X_train, Y_train, cv=kfold, scoring=scoring)
-	#~ results.append(cv_results)
-	#~ names.append(name)
-	#~ msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
-	#~ print(msg)
+for name, model in models:
+	kfold = model_selection.KFold(n_splits=10, random_state=seed)
+	cv_results = model_selection.cross_val_score(model, X_train, Y_train, cv=kfold, scoring=scoring)
+	results.append(cv_results)
+	names.append(name)
+	msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
+	print(msg)
 
-#~ # Compare Algorithms
-#~ fig = plt.figure()
-#~ fig.suptitle('Algorithm Comparison')
-#~ ax = fig.add_subplot(111)
-#~ plt.boxplot(results)
-#~ ax.set_xticklabels(names)
-#~ plt.show()
+# Compare Algorithms
+fig = plt.figure()
+fig.suptitle('Algorithm Comparison')
+ax = fig.add_subplot(111)
+plt.boxplot(results)
+ax.set_xticklabels(names)
+plt.show()
 
 # Make predictions on validation dataset
 knn = KNeighborsClassifier()
 knn.fit(X_train, Y_train)
 predictions = knn.predict(X_validation)
 print(accuracy_score(Y_validation, predictions))
-
-#~ y_pred = [0, 2, 1, 3]
-#~ y_true = [0, 1, 2, 3]
-#~ accuracy_score(y_true, y_pred)
-#~ accuracy_score(y_true, y_pred, normalize=False)
-
-
-
 print(confusion_matrix(Y_validation, predictions))
 print(classification_report(Y_validation, predictions))
 
