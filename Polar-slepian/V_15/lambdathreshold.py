@@ -233,7 +233,28 @@ def E_channel_abs_llr(LLRdict,channel_plist,N,G,runsim):
 		Edict[str(channel_p)]=E_channel
 		
 	return Edict	
-
+# to be combined with above
+def E_good_channel_abs_llr(LLRdict,channel_plist,N,G,runsim):
+	#as I is a subsequence of RI , only G is needed
+	#if use_func_for_LT:
+	#	LT=f_Irv_abs(LT)
+		
+	Edict={}
+	for channel_p in channel_plist:
+		print "\nrunning for "+str(channel_p)+"..."
+		
+		Edict[str(channel_p)]=[]
+		E_channel=np.zeros(G)	
+		for i in range(runsim):
+			LLRchannels=LLRdict[str(channel_p)][i][0][:G]
+			SentBitchannels=LLRdict[str(channel_p)][i][1][:G]
+			RV=[abs(llr) for llr,sentbit in zip(LLRchannels,SentBitchannels)]
+			
+			E_channel=E_channel+np.array(RV,dtype=float)/runsim
+		
+		Edict[str(channel_p)]=E_channel
+		
+	return Edict	
 
 #=======================Functions for LLRdictWU
 	

@@ -42,12 +42,13 @@ runsim=1000
 channel_plist=[0.04,0.15,0.2,0.25]
 C=pl.CapacityBSC(N,design_p)
 G=int(C)
-
+G=400
+P_factor=float(int(C))/G
 #------------------------------------LT
 #G=250
 LT=float(np.log2(N)/N)
-LT=10
-PT=9
+LT=5
+PT=65.5#*P_factor
 print LT
 #absllr
 Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_abs,use_bad=True,use_func_for_LT=True)
@@ -82,6 +83,9 @@ for channel_p in channel_plist:
 
 fnick="absllr-bad"
 f="$|LLR|"	
+
+#~ fnick="absllr-good"
+#~ f="$|LLR|"	
 
 #~ fnick="f_Irv"
 #~ f="$log 2/(1+e^{-llr*(1-2u)})"
