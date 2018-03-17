@@ -47,11 +47,11 @@ F=N-G
 #------------------------------------LT
 #G=250
 #absllr
-#Edict=lmb.E_channel_abs_llr(LLRdict,channel_plist,N,G,runsim)
+Edict=lmb.E_channel_abs_llr(LLRdict,channel_plist,N,G,runsim)
 
 		
 #f_Irv
-Edict=lmb.E_channel_altIrv_WU(LLRdict,channel_plist,N,G,runsim)
+#Edict=lmb.E_channel_altIrv_WU(LLRdict,channel_plist,N,G,runsim)
 
 
 #f_Irv_abs
@@ -73,8 +73,8 @@ for i in range(F):
 	
 
 
-#fnick="absllr"
-#f="$|LLR|$"	
+fnick="absllr"
+f="$|LLR|$"	
 
 #~ fnick="f_Irv"
 #~ f="$log 2/(1+e^{-llr*(1-2u)})$"
@@ -85,8 +85,8 @@ for i in range(F):
 #~ fnick="f_Irv_abs"
 #~ f="$log 2/(1+e^{-|llr|})$"
 
-fnick="f_Irv_altered"
-f="$-log 2/(1+e^{llr*(1-2u)})$"
+#~ fnick="f_Irv_altered"
+#~ f="$-log 2/(1+e^{llr*(1-2u)})$"
 	
 
 

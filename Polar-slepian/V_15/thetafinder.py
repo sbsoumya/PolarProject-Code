@@ -46,12 +46,12 @@ G=int(C)
 #------------------------------------LT
 #G=250
 LT=float(np.log2(N)/N)
-LT=5
-PT=12
+LT=10
+PT=9
 print LT
 #absllr
-#Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_abs,use_bad=False,use_func_for_LT=True)
-#LT=lmb.f_abs(LT)
+Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_abs,use_bad=True,use_func_for_LT=True)
+LT=lmb.f_abs(LT)
 		
 #f_Irv
 #Fdict=lmb.perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad=True,use_func_for_LT=True)
@@ -59,8 +59,12 @@ print LT
 
 
 #f_Irv_abs
-Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=True,use_func_for_LT=True)
-LT=lmb.f_Irv_abs(LT)
+#Fdict=lmb.perc_channel_func_WD(LLRdict,channel_plist,N,LT,G,runsim,f_absllr=lmb.f_Irv_abs,use_bad=True,use_func_for_LT=True)
+#LT=lmb.f_Irv_abs(LT)
+
+#f_Irv 
+#Fdict=lmb.perc_channel_func_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,f_llr=lmb.f_Irv_alt,use_bad=True,use_func_for_LT=False)
+#LT=lmb.f_Irv_abs(LT)
 
 Ppercdict=lmb.PrOffracaboveFT(Fdict,channel_plist,PT,runsim)
 print Ppercdict
@@ -76,8 +80,8 @@ for channel_p in channel_plist:
 
 
 
-#~ fnick="absllr-good"
-#~ f="$|LLR|"	
+fnick="absllr-bad"
+f="$|LLR|"	
 
 #~ fnick="f_Irv"
 #~ f="$log 2/(1+e^{-llr*(1-2u)})"
@@ -85,8 +89,8 @@ for channel_p in channel_plist:
 #~ fnick="f_Irv_rcv"
 #~ f="$log 2/(1+e^{-llr*(1-2r)})"
 
-fnick="f_Irv_abs"
-f="$log 2/(1+e^{-|llr|})"
+#~ fnick="f_Irv_abs"
+#~ f="$log 2/(1+e^{-|llr|})"
 
 #~ fnick="f_Irv_altered"
 #~ f="$-log 2/(1+e^{llr*(1-2u)})"

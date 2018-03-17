@@ -263,7 +263,32 @@ def perc_channel_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,use_bad,use_func_for
 			Fdict[str(channel_p)].append(float(num_channel)*100/len(LLRchannels))
 		
 	return Fdict
-
+#general function
+def perc_channel_func_Irv_WU(LLRdict,channel_plist,N,LT,G,runsim,f_llr,use_bad,use_func_for_LT):
+	#as I is a subsequence of RI , only G is needed
+	if use_func_for_LT:
+		LT=f_llr(LT)
+		print LT
+		
+	Fdict={}
+	for channel_p in channel_plist:
+		print "\nrunning for "+str(channel_p)+"..."
+		
+		Fdict[str(channel_p)]=[]	
+		for i in range(runsim):
+			if use_bad:
+				LLRchannels=LLRdict[str(channel_p)][i][0][G:]
+				SentBitchannels=LLRdict[str(channel_p)][i][1][G:]
+				#print SentBitchannels
+			else:
+				LLRchannels=LLRdict[str(channel_p)][i][0][:G]
+				SentBitchannels=LLRdict[str(channel_p)][i][1][:G]
+				
+			#num_channel=sum(f_Irv_abs(abs(llr)) >= LT for llr in LLRchannels)
+			num_channel=sum(f_llr(llr,int(sentbit)) >= LT for llr,sentbit in zip(LLRchannels,SentBitchannels))
+			Fdict[str(channel_p)].append(float(num_channel)*100/len(LLRchannels))
+		
+	return Fdict
 #returns  empirical average of f_Irv for the channels	
 def E_channel_Irv_WU(LLRdict,channel_plist,N,G,runsim):
 	#as I is a subsequence of RI , only G is needed
@@ -351,6 +376,12 @@ def f_Irv_abs(absllr):
 def f_Irv(llr,sentbit):
 	return (ma.log(2)-ml.logdomain_sum(0,-llr*(1-2*sentbit)))/ma.log(2)
 	 # unlike the theory here llr is p0/p1 s0 -llr
+
+def f_Irv_alt(llr,sentbit):
+	return -f_Irv(-llr,sentbit)
+	 
+
+
 
 #----------------------------------fuctions for implementation of rateless LTPT
 def perc_goodchannel_llr(llr,I,LT):

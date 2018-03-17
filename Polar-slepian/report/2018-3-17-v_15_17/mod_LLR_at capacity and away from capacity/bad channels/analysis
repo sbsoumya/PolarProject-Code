@@ -1,0 +1,2 @@
+The FER is lower bounded by P_MD
+We can do better with changing lambda as per expectation plot if we as OK with making P_False alarm higher. We get lower P_MD (average of all P_MD for true channels) but we take a rate hit.
