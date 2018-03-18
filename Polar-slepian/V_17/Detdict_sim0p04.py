@@ -30,7 +30,7 @@ N=1024
 
 channel_plist=[0.04,0.15]
 design_p=0.04
-runsim=1000
+runsim=100000
 deratelist=np.arange(0.2,1.2,0.2)
 
 

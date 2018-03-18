@@ -90,5 +90,19 @@ def get_Detdict(channel_p,design_p,I,Tlist,N,runsim,RI):
 				wr.writerow([str('"')+Detdictcsv[str(T)][sim][0]+str('"')]+[str('"')+Detdictcsv[str(T)][sim][1]+str('"')]+[str('"')+Detdictcsv[str(T)][sim][2]+str('"')]+[str('"')+Detdictcsv[str(T)][sim][3]+str('"')])
 	return fname+".txt"
 
-	#~ Detbit_match_probdict={}
-	#~ Detframe_match_probdict={}
+def load_Detdict(filename):
+	f1=open(filename,'r')
+	return json.load(f1);
+
+def prob_detmatch(Detdict,runsim):
+	#print Detdict
+	Detmatch_probdict={}
+	for T in Detdict:
+		mismatchcnt=0
+		for i in range(runsim):
+			#print Detdict[T][i][5]
+			mismatchcnt=mismatchcnt+Detdict[T][i][5]
+		Detmatch_probdict[T]=1-float(mismatchcnt)/runsim
+	Tlist=Detmatch_probdict.keys()
+	Tlist.sort()
+	return (Tlist,Detmatch_probdict)
